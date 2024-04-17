@@ -273,7 +273,7 @@ while not ongoing == not_ongoing:
             Check1([point1.pos[0] + jit1, point1.pos[1] + jit2], point1.lineColor)
         else:
             Check2([point1.pos[0] + jit1, point1.pos[1] + jit2], point1.lineColor)
-        point2.size +=  [wheel_dY*step, wheel_dY*step]
+        point2.size +=  [wheel_dY*(step/2), wheel_dY*(step/2)]
         point2.draw()
         repeat_draw()
         win.flip()
