@@ -120,8 +120,8 @@ jitter = (0.005, 0.01, 0.015, 0.02,0.025, 0, -0.005, -0.01, -0.015, -0.02,-0.025
 
 ## Circle positions and other hemifield dependencies
 if hem == 'RH':
-    #angle division between BS and outside locations = polar angle of the BS x and (y + BS size), - angle of the BS location (dev from 0) + 2(padding) + 2*rad
-    angup = (cart2pol(spot_righ_cart[0], spot_righ_cart[1] + spot_righ_size[1])[0] - spot_righ[0]) + 2 + 2 * rad
+    #angle division between BS and outside locations = polar angle of the BS x and (y + BS size), - angle of the BS location (dev from 0) + 4 (padding) + radious
+    angup = (cart2pol(spot_righ_cart[0], spot_righ_cart[1] + spot_righ_size[1])[0] - spot_righ[0]) + 2 + 2+ rad
     positions = {
         "righ-top": [(spot_righ[0] + angup, spot_righ[1])], # BS location + angup, same radians 
         "righ-mid": [(spot_righ[0],  spot_righ[1])], 
@@ -129,8 +129,8 @@ if hem == 'RH':
     blindspot.fillColor = col_righ # red
 
 else:
-    #angle division between BS and outside locations = polar angle of the BS x and (y + BS size), + angle of the BS location (dev from 0) + 2(padding) + 2*radious
-    angup = (cart2pol(spot_righ_cart[0], spot_righ_cart[1] - spot_righ_size[1])[0] + spot_righ[0]) +  2 + 2 * rad
+    #angle division between BS and outside locations = polar angle of the BS x and (y + BS size), + angle of the BS location (dev from 0) + 4 (padding) +radious
+    angup = (cart2pol(spot_righ_cart[0], spot_righ_cart[1] - spot_righ_size[1])[0] - spot_righ[0]) +  2 +2+ rad
     positions = {
         "righ-top": [(spot_righ[0] - angup, spot_righ[1])], # BS location + angup, same radians 
         "righ-mid": [(spot_righ[0],  spot_righ[1])],
