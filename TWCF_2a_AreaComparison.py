@@ -209,8 +209,20 @@ def repeat_draw():
     hiFusion.draw()
     loFusion.draw()
 
+repeat_draw()
+win.flip()
+
 #starting experimental loop
 while not ongoing == not_ongoing:
+    repeat_draw()
+    win.flip()
+    mouse.clickReset()
+    while 1:
+        n = mouse.getPressed()
+        if n[2] == True:
+            print('n', n)
+            mouse.clickReset()
+            break
     # Point 1 locations and colors
     if ongoing[0][0] == False and ongoing [0][1] == False :  #any 
         position = 1
@@ -285,8 +297,10 @@ while not ongoing == not_ongoing:
             loFusion.fieldPos = (random.sample(jitter, 2))
         elif cycle == 21:
             cycle = 0
+            turn = turn *-1
         m = mouse.getPressed()
-        if any(m) == True:
+        if m[0] == True:
+            print(m)
             finaldiff = point1.size[0] - point2.size[0]
             mouse.clickReset()
             break
