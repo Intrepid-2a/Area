@@ -1,7 +1,7 @@
 """
 Motion curvature estimation across blind spot
 TWCF IIT vs PP experiment 2a piloting
-Authors: Belén María Montabes de la Cruz, Clement Abbatecola, in collaboration with Marius t'Hart
+Authors: Belén María Montabes de la Cruz, Clement Abbatecola
     Code Version:
         2.0 # 2024/04/09    Final common version before eye tracking
         3.0 # 2024/03/07    Common version with Eye tracking version
@@ -121,7 +121,7 @@ def doAreaTask(ID=None, hem=None, location=None):
         col_both = [eval(col_param[3])[1], eval(col_param[5])[0], -1] 
     
         ## window & elements
-        win = visual.Window([1500,800],allowGUI=True, monitor='ExpMon',screen=1, units='deg', viewPos = [0,0], fullscr = False, color= col_back)
+        win = visual.Window([1500,800],allowGUI=True, monitor='ExpMon',screen=1, units='deg', viewPos = [0,0], fullscr = True, color= col_back)
         win.mouseVisible = False
         fixation = visual.ShapeStim(win, vertices = ((0, -2), (0, 2), (0,0), (-2, 0), (2, 0)), lineWidth = 4, units = 'pix', size = (10, 10), closeShape = False, lineColor = col_both)
         xfix = visual.ShapeStim(win, vertices = ((-2, -2), (2, 2), (0,0), (-2, 2), (2, -2)), lineWidth = 4, units = 'pix', size = (10, 10), closeShape = False, lineColor = col_both)
@@ -177,7 +177,7 @@ def doAreaTask(ID=None, hem=None, location=None):
             hem = expInfo['hemifield']
         
         ## path
-        main_path = '../data/distance/'
+        main_path = '../data/area/'
         data_path = main_path
         eyetracking_path = main_path + 'eyetracking/' + ID + '/'
         x = 1
@@ -205,9 +205,9 @@ def doAreaTask(ID=None, hem=None, location=None):
     
         colors = setup['colors']
         col_both = colors['both']
-        if hem== 'left':
+        if hem == 'left':
             col_ipsi, col_contra = colors['left'], colors['right']
-        if hem== 'right':
+        if hem == 'right':
             col_contra, col_ipsi = colors['left'], colors['right']
 
         hiFusion = setup['fusion']['hi'] #might need to change it due to size
@@ -218,7 +218,7 @@ def doAreaTask(ID=None, hem=None, location=None):
         fixation = setup['fixation']
     
         tracker = setup['tracker']
-        
+ 
     else:
         raise ValueError("Location should be 'glasgow' or 'toronto', was {}".format(location))
 
@@ -250,7 +250,7 @@ def doAreaTask(ID=None, hem=None, location=None):
     if k[0] in ['q']:
         win.close()
         core.quit()
-
+    
     ######
     ## Prepare stimulation
     ######
@@ -299,7 +299,7 @@ def doAreaTask(ID=None, hem=None, location=None):
     # positions
     poss = list(positions.items())
   
-    print('hello1')
+    
     ## Break
     breakk = visual.TextStim(win, text="You are now midway through the experiment.\n You can take a little break. Press space bar when you're ready to continue.", pos = [0, 5], color = col_both)
     breakk.wrapWidth = 40
@@ -526,11 +526,11 @@ def doAreaTask(ID=None, hem=None, location=None):
                 tracker.comment(stim_comments.pop()) # pair 2 off
             gazeFile.close()
 
-        
-
         if abort:
             break
+        
         if not gaze_out:
+            blink = 1
             if not finaldiff == 'Trial aborted':
                 trial[position][col] += 1
                 print('this trial is ', trial[position][col])
@@ -538,6 +538,7 @@ def doAreaTask(ID=None, hem=None, location=None):
                 print('this trial was aborted')
                 pass
         else:
+            blink = 0
             # auto recalibrate if no initial fixation
             if recalibrate:
                 recalibrate = False
@@ -572,6 +573,16 @@ def doAreaTask(ID=None, hem=None, location=None):
                         abort = True
                         break
 
+        while blink==1:
+            hiFusion.draw()
+            loFusion.draw()
+            xfix.draw()
+            win.flip()
+            m = mouse.getPressed()
+            if m[2] == True:
+                print(m)
+                mouse.clickReset()
+                break
         #writing reponse file 
         respFile = open(data_path + filename + str(x) + '.txt','a')
         respFile.write('\t'.join(map(str, [trial[position][col], 
