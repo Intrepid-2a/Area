@@ -1,7 +1,7 @@
 """
 Motion curvature estimation across blind spot
 TWCF IIT vs PP experiment 2a piloting
-Authors: Belén María Montabes de la Cruz, Clement Abbatecola
+Authors: Belén María Montabes de la Cruz, Clement Abbatecola, in collaboration with Marius t'Hart
     Code Version:
         2.0 # 2024/04/09    Final common version before eye tracking
         3.0 # 2024/03/07    Common version with Eye tracking version
