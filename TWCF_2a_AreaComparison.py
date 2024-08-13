@@ -286,7 +286,7 @@ def doAreaTask(ID=None, hem=None, location=None):
         #angle division between BS and outside locations = polar angle of the BS x and (y + BS size), - angle of the BS location (dev from 0) + 4 (padding) + radious
         angup = (cart2pol(spot_cart[0], spot_cart[1] + spot_size[1])[0] - spot[0]) + 2 + 2+ rad
         positions = {
-            "righ-top": [(spoth[0] + angup, spot[1])], # BS location + angup, same radians 
+            "righ-top": [(spot[0] + angup, spot[1])], # BS location + angup, same radians 
             "righ-mid": [(spot[0],  spot[1])], 
         }
     else:
