@@ -117,7 +117,7 @@ def doAreaTask(ID=None, hem=None, location=None):
         col_file.close()
         col_ipsi = eval(col_param[3]) if hem == 'left' else eval(col_param[5]) # left or right
         col_cont = eval(col_param[5]) if hem == 'left' else eval(col_param[3]) # right or left
-        col_back   = [ 0.55, 0.45,  -1.0]  #changed by belen to prevent red bleed
+        col_back   =  [ 0.55, 0.45,  -1.0]  #changed by belen to prevent red bleed
         col_both = [eval(col_param[3])[1], eval(col_param[5])[0], -1] 
     
         ## window & elements
@@ -224,15 +224,16 @@ def doAreaTask(ID=None, hem=None, location=None):
 
     # create output files:
     respFile = open(data_path + filename + str(x) + '.txt','w')
-    respFile.write(''.join(map(str, ['Start: \t' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M') + '\n'])))
     respFile.write('\t'.join(map(str, ['Trial',
                                     'StimulusPosition',
-                                    'GreenStimulus',
+                                    'EyeStim',
                                     'FixOrigSize',
                                     'PeriOrigSize',
                                     'OriginalDiff',
                                     'FinalDiff', 
                                     'GazeOut'])) + '\n')
+    respFile.write(''.join(map(str, ['Start: \t' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M') + '\n'])))
+    
     respFile.close()
 
     gazeFile = open(eyetracking_path + filename + str(x) + '_gaze.txt','w')
@@ -391,10 +392,10 @@ def doAreaTask(ID=None, hem=None, location=None):
         '''
         # Point 1 locations and colors
         if ongoing[0][0] == False and ongoing [0][1] == False :  #any 
-            position = 1
+            position = 1 #BS location, defined below
             col = np.random.choice(list(compress([0, 1], ongoing[position])))
         elif ongoing[1][0] == False and ongoing [1][1] == False:
-            position = 0
+            position = 0 #Outside BS location, defined below
             col = np.random.choice(list(compress([0, 1], ongoing[position])))
         else:
             position = np.random.choice([0, 1]) 
@@ -405,7 +406,7 @@ def doAreaTask(ID=None, hem=None, location=None):
         if position == 0:
             point1.pos = pol2cart(poss[0][1][0][0], poss[0][1][0][1]) # Outside BS location
         else:
-            point1.pos = pol2cart(poss[1][1][0][0], poss[1][1][0][1]) #pol2cart(poss[1][1][0][0], poss[1][1][0][1]) # BS location
+            point1.pos = pol2cart(poss[1][1][0][0], poss[1][1][0][1]) # BS location
         point1.size = [rad, rad]
         
         print('hello 5')
