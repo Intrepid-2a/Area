@@ -241,7 +241,7 @@ def doAreaTask(ID=None, hem=None, location=None):
     gazeFile.close()
 
     ## instructions
-    instructions = visual.TextStim(win, text="Throughout the experiment you will fixate at a a cross located at the centre of the screen. It is important that you maintain fixation on this cross at all times.\n\n In every trial you will be presented with two circles, one surrounding the fixation cross and another in the periphery.The circles will always be slightly different in size. Your task is to make the size of the fixation circle match the one in the periphery using the mouse scroll.\n \n Scroll up = increase size of fixation circle.\n \n Scroll down = decrease size of fixation circle.\n\n Mouse click = accept final size and continue to next trial \n\n\n Press the space bar when you're ready to start the experiment.", color = col_both)
+    instructions = visual.TextStim(win, text="Throughout the experiment you will fixate at a a cross located at the centre of the screen. It is important that you maintain fixation on this cross at all times.\n\n In every trial you will be presented with two circles, one surrounding the fixation cross and another in the periphery.The circles will always be slightly different in size. Your task is to make the size of the fixation circle match the one in the periphery by moving your mouse up or down.\n \n Move up = increase size of fixation circle.\n \n Move down = decrease size of fixation circle.\n\n Mouse click = accept final size and continue to next trial \n\n\n Press the space bar when you're ready to start the experiment.", color = col_both)
     instructions.wrapWidth = 40
     instructions.draw()
     win.flip()
@@ -499,12 +499,12 @@ def doAreaTask(ID=None, hem=None, location=None):
                     elif 'space' in k:
                          finaldiff = 'Trial aborted'
                          break
-                wheel_dX, wheel_dY = mouse.getWheelRel()
+                wheel_dX, wheel_dY = mouse.getRel() #gets x/ylocation of mouse
                 if turn == 1:
                     Check1([point1.pos[0] + jit1, point1.pos[1] + jit2], point1.lineColor)
                 else:
                     Check2([point1.pos[0] + jit1, point1.pos[1] + jit2], point1.lineColor)
-                point2.size +=  [wheel_dY*(step/2), wheel_dY*(step/2)]
+                point2.size +=  [wheel_dY, wheel_dY] #uses y mouse location to adjust
                 point2.draw()
                 repeat_draw()
                 win.flip()
