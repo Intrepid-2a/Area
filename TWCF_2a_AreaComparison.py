@@ -117,7 +117,7 @@ def doAreaTask(ID=None, hem=None, location=None):
         col_file.close()
         col_ipsi = eval(col_param[3]) if hem == 'left' else eval(col_param[5]) # left or right
         col_cont = eval(col_param[5]) if hem == 'left' else eval(col_param[3]) # right or left
-        col_back   =  [ 0.55, 0.45,  -1.0]  #changed by belen to prevent red bleed
+        col_back   = [ 0.55, 0.45,  -1.0]   #changed by belen to prevent red bleed
         col_both = [eval(col_param[3])[1], eval(col_param[5])[0], -1] 
     
         ## window & elements
@@ -499,12 +499,12 @@ def doAreaTask(ID=None, hem=None, location=None):
                     elif 'space' in k:
                          finaldiff = 'Trial aborted'
                          break
-                wheel_dX, wheel_dY = mouse.getRel() #gets x/ylocation of mouse
+                wheel_dX, wheel_dY = mouse.getWheelRel() #gets x/ylocation of mouse
                 if turn == 1:
                     Check1([point1.pos[0] + jit1, point1.pos[1] + jit2], point1.lineColor)
                 else:
                     Check2([point1.pos[0] + jit1, point1.pos[1] + jit2], point1.lineColor)
-                point2.size +=  [wheel_dY, wheel_dY] #uses y mouse location to adjust
+                point2.size +=  [wheel_dY*(step/2), wheel_dY*(step/2)]#uses y mouse location to adjust
                 point2.draw()
                 repeat_draw()
                 win.flip()
