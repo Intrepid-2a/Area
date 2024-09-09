@@ -100,12 +100,10 @@ def doAreaTask(ID=None, hem=None, location=None):
         #NOTE : there is no 'no difference' e.g. rad-step, rad, rad+step, can add if preferred
 
         # Repeating so there's 50 trials per eye and location (5 repeats of an original size for all)
-        random.seed(1)
-        random.shuffle(adaptorig) #shuffeling with seed
+        random.shuffle(adaptorig) 
         adapt = []
         i = 1
         while i < 6: #5 repetitions  
-            random.seed (i)
             random.shuffle(adaptorig)
             adapt += adaptorig
             i += 1
@@ -117,7 +115,7 @@ def doAreaTask(ID=None, hem=None, location=None):
         col_file.close()
         col_ipsi = eval(col_param[3]) if hem == 'left' else eval(col_param[5]) # left or right
         col_cont = eval(col_param[5]) if hem == 'left' else eval(col_param[3]) # right or left
-        col_back   = [ 0.55, 0.45,  -1.0]   #changed by belen to prevent red bleed
+        col_back   = [ 0.65, 0.35,  -1.0]   #changed by belen to prevent red bleed
         col_both = [eval(col_param[3])[1], eval(col_param[5])[0], -1] 
     
         ## window & elements
@@ -346,14 +344,11 @@ def doAreaTask(ID=None, hem=None, location=None):
     mouse= event.Mouse(visible=False) #invisible
     #trials for each position
     adapt1 = adapt.copy()
-    random.seed(6)
     random.shuffle(adapt1)
     print('ad1', adapt, 'ad2', adapt1)
     adapt2 = adapt.copy()
-    random.seed(7)
     random.shuffle(adapt2)
     adapt3 = adapt.copy()
-    random.seed(8)
     random.shuffle(adapt3)
     adaptposs = [[adapt, adapt1], [adapt2, adapt3]] # print(adaptposs[0][0],adaptposs[0][1], adaptposs[1][0], adaptposs[1][1]) add 1more [0] to index
     #Circle stimuli jitter
