@@ -280,17 +280,18 @@ def doAreaTask(ID=None, hem=None, location=None):
     blindspot.autoDraw = True
 
     ## Positions, colors and instructions by hemifield
-    
+    one_dva_angle = 2 * cart2pol(spot_cart[0], 0.5)[0]
+
     if hem == 'right':
-        #angle division between BS and outside locations = polar angle of the BS x and (y + BS size), - angle of the BS location (dev from 0) + 4 (padding) + radious
-        angup = (cart2pol(spot_cart[0], spot_cart[1] + spot_size[1])[0] - spot[0]) + 2 + 2+ rad
+        #BS height/2 + Circle radius +2 degs of padding
+        angup = one_dva_angle * ( (spot_size[1]/2) + (rad/2) + 2)
         positions = {
             "righ-top": [(spot[0] + angup, spot[1])], # BS location + angup, same radians 
             "righ-mid": [(spot[0],  spot[1])], 
         }
     else:
-        #angle division between BS and outside locations = polar angle of the BS x and (y + BS size), + angle of the BS location (dev from 0) + 4 (padding) +radious
-        angup = (cart2pol(spot_cart[0], spot_cart[1] - spot_size[1])[0] - spot[0]) +  2 +2+ rad
+        #BS height/2 + Circle radius +2 degs of padding
+        angup = one_dva_angle * ( (spot_size[1]/2) + (rad/2) + 2)
         positions = {
             "left-top": [(spot[0] - angup, spot[1])], # BS location + angup, same radians 
             "left-mid": [(spot[0],  spot[1])],
@@ -354,7 +355,7 @@ def doAreaTask(ID=None, hem=None, location=None):
     #Circle stimuli jitter
     posjit = [0 , 0.05, 0.1, 0.15, 0.25, 0.5,- 0.05, -0.1, -0.15, -0.25, -0.5]
 
-    print('hello2')
+
     #keeping track of time 
     trial_clock = core.Clock()
     
@@ -372,7 +373,7 @@ def doAreaTask(ID=None, hem=None, location=None):
     #if k[0] in ['q']:
     #    win.close()
     #    core.quit()
-    print('hello3')
+
     while not ongoing == not_ongoing:
         repeat_draw()
         win.flip()
