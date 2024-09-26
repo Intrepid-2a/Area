@@ -89,10 +89,11 @@ def doAreaTask(ID=None, hem=None, location=None):
 
         # Fixation circle radius    
         if spot_size[1] > spot_size[0]:
-            rad = (spot_size[1] + 3) # BS size + 3 of padding 
+            rad = (spot_size[1] + 3) # BS size + 3 of padding, minimum 2.5 padding taking jitter into account
         else:
-            rad = (spot_size[0] + 3) # BS size + 3 of padding
+            rad = (spot_size[0] + 3) # BS size + 3 of padding, minimum 2.5 padding taking jitter into account
 
+        print(rad)
         ## Creating distributions for the experiment
         # Range of possible start sizes
         step = rad/10 # rad (height or width +3)/10
@@ -126,8 +127,8 @@ def doAreaTask(ID=None, hem=None, location=None):
 
         ## Fusion Stimuli
 
-        hiFusion = fusionStim(win=win, pos=[0, 0.9], rows=3, columns=5,square=.05, units = 'norm', colors = [col_back, col_both])
-        loFusion = fusionStim(win=win, pos=[0,-0.9], rows=3, columns=5,square=.05, units = 'norm', colors = [col_back, col_both])
+        hiFusion = fusionStim(win=win, pos=[0,13], rows=3, columns=10,square=.5, units = 'deg', colors = [col_back, col_both])
+        loFusion = fusionStim(win=win, pos=[0,-13], rows=3, columns=10,square=.5, units = 'deg', colors = [col_back, col_both])
         # jitter added to the field to reduce local cues
         jitter = (0.005, 0.01, 0.015, 0.02,0.025, 0, -0.005, -0.01, -0.015, -0.02,-0.025)
 
@@ -141,7 +142,7 @@ def doAreaTask(ID=None, hem=None, location=None):
         ## eyetracking   
         colors = {'both'   : col_both, 
                   'back'   : col_back} 
-        tracker = EyeTracker(tracker           = 'eyelink',
+        tracker = EyeTracker(tracker           = 'mouse',
                              trackEyes         = [True, True],
                              fixationWindow    = 2.0,
                              minFixDur         = 0.2,
@@ -225,6 +226,7 @@ def doAreaTask(ID=None, hem=None, location=None):
     respFile.write('\t'.join(map(str, ['Trial',
                                     'StimulusPosition',
                                     'EyeStim',
+                                    'Color',
                                     'FixOrigSize',
                                     'PeriOrigSize',
                                     'OriginalDiff',
@@ -281,21 +283,22 @@ def doAreaTask(ID=None, hem=None, location=None):
 
     ## Positions, colors and instructions by hemifield
     one_dva_angle = 2 * cart2pol(spot_cart[0], 0.5)[0]
-
     if hem == 'right':
-        #BS height/2 + Circle radius +2 degs of padding
+        #angle division between BS and outside locations = polar angle of the BS x and (y + BS size), - angle of the BS location (dev from 0) + 4 (padding) + radious
         angup = one_dva_angle * ( (spot_size[1]/2) + (rad/2) + 2)
         positions = {
             "righ-top": [(spot[0] + angup, spot[1])], # BS location + angup, same radians 
             "righ-mid": [(spot[0],  spot[1])], 
         }
+        print('positions',spot[0], angup, spot[1])
     else:
-        #BS height/2 + Circle radius +2 degs of padding
-        angup = one_dva_angle * ( (spot_size[1]/2) + (rad/2) + 2)
+        #angle division between BS and outside locations = polar angle of the BS x and (y + BS size), + angle of the BS location (dev from 0) + 4 (padding) +radious
+        angup = one_dva_angle * ((spot_size[1]/2) + (rad/2)+ 2)
         positions = {
-            "left-top": [(spot[0] - angup, spot[1])], # BS location + angup, same radians 
+            "left-top": [(spot[0] - angup/90, spot[1])], # BS location + angup, same radians 
             "left-mid": [(spot[0],  spot[1])],
         }
+        print('positions',spot[0], angup, spot[1])
     # positions
     poss = list(positions.items())
   
@@ -312,8 +315,12 @@ def doAreaTask(ID=None, hem=None, location=None):
     ######
 
     ## setup and initialize eye-tracker
-    tracker.initialize(calibrationScale=(0.35, 0.35))
+    if tracker.tracker == 'eyelink':
+        tracker.initialize(calibrationScale=(0.35, 0.35))
+    else:
+        tracker.initialize()
     tracker.calibrate()
+
     win.flip()
     fixation.draw()
     win.flip()
@@ -355,7 +362,7 @@ def doAreaTask(ID=None, hem=None, location=None):
     #Circle stimuli jitter
     posjit = [0 , 0.05, 0.1, 0.15, 0.25, 0.5,- 0.05, -0.1, -0.15, -0.25, -0.5]
 
-
+    print('hello2')
     #keeping track of time 
     trial_clock = core.Clock()
     
@@ -373,7 +380,7 @@ def doAreaTask(ID=None, hem=None, location=None):
     #if k[0] in ['q']:
     #    win.close()
     #    core.quit()
-
+    print('hello3')
     while not ongoing == not_ongoing:
         repeat_draw()
         win.flip()
@@ -433,8 +440,11 @@ def doAreaTask(ID=None, hem=None, location=None):
         #adding fusion stimuli
         hiFusion.resetProperties()
         loFusion.resetProperties()
-        hiFusion.fieldPos = (random.sample(jitter, 2))
-        loFusion.fieldPos = (random.sample(jitter, 2))
+        hiFusion.pos = [0,13]
+        loFusion.pos = [0,-13]
+        hiFusion.pos = [hiFusion.pos[0]+random.choice(posjit),hiFusion.pos[1]+random.choice(posjit)]
+        loFusion.pos = [loFusion.pos[0]+random.choice(posjit),loFusion.pos[1]+random.choice(posjit)]
+
         repeat_draw()
         win.flip()
 
@@ -508,8 +518,10 @@ def doAreaTask(ID=None, hem=None, location=None):
                 if cycle == 20:
                     hiFusion.resetProperties()
                     loFusion.resetProperties()
-                    hiFusion.fieldPos = (random.sample(jitter, 2))
-                    loFusion.fieldPos = (random.sample(jitter, 2))
+                    print('positions', hiFusion.pos, loFusion.pos)
+                    hiFusion.pos = [hiFusion.pos[0]+random.choice(posjit),hiFusion.pos[1]+random.choice(posjit)]
+                    loFusion.pos = [loFusion.pos[0]+ random.choice(posjit),loFusion.pos[1]+random.choice(posjit)]
+                    print('positions2', hiFusion.pos, loFusion.pos,random.sample(posjit, 2))
                 elif cycle == 21:
                     cycle = 0
                     turn = turn *-1
@@ -585,6 +597,7 @@ def doAreaTask(ID=None, hem=None, location=None):
         respFile.write('\t'.join(map(str, [trial[position][col], 
                                         position,# Stimulus location
                                         col,
+                                        point1.lineColor,
                                         round(ogp2, 2), #change
                                         round(point1.size[0], 2),
                                         round(ogdiff,2),
