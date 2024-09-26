@@ -127,8 +127,17 @@ def doAreaTask(ID=None, hem=None, location=None):
 
         ## Fusion Stimuli
 
-        hiFusion = fusionStim(win=win, pos=[0,13], rows=3, columns=10,square=.5, units = 'deg', colors = [col_back, col_both])
-        loFusion = fusionStim(win=win, pos=[0,-13], rows=3, columns=10,square=.5, units = 'deg', colors = [col_back, col_both])
+        hiFusion = fusionStim(win=win, pos=[0,13], rows=3, columns=10,square=.7, units = 'deg', colors = [col_back, col_both])
+        loFusion = fusionStim(win=win, pos=[0,-13], rows=3, columns=10,square=.7, units = 'deg', colors = [col_back, col_both])
+        
+        fusx = hiFusion.pos[0]
+        hifusy = hiFusion.pos[1]
+        lofusy= loFusion.pos[1]
+
+        #hiFusion = fusionStim(win=win, pos=[0, 0.9], rows=3, columns=5,square=.05, units = 'norm', colors = [col_back, col_both])
+        #loFusion = fusionStim(win=win, pos=[0,-0.9], rows=3, columns=5,square=.05, units = 'norm', colors = [col_back, col_both])
+
+        
         # jitter added to the field to reduce local cues
         jitter = (0.005, 0.01, 0.015, 0.02,0.025, 0, -0.005, -0.01, -0.015, -0.02,-0.025)
 
@@ -382,8 +391,7 @@ def doAreaTask(ID=None, hem=None, location=None):
     #    core.quit()
     print('hello3')
     while not ongoing == not_ongoing:
-        repeat_draw()
-        win.flip()
+
         '''
         mouse.clickReset()
         while 1:
@@ -440,10 +448,9 @@ def doAreaTask(ID=None, hem=None, location=None):
         #adding fusion stimuli
         hiFusion.resetProperties()
         loFusion.resetProperties()
-        hiFusion.pos = [0,13]
-        loFusion.pos = [0,-13]
-        hiFusion.pos = [hiFusion.pos[0]+random.choice(posjit),hiFusion.pos[1]+random.choice(posjit)]
-        loFusion.pos = [loFusion.pos[0]+random.choice(posjit),loFusion.pos[1]+random.choice(posjit)]
+        
+        hiFusion.pos = [fusx + random.choice(posjit),hifusy + random.choice(posjit)]
+        loFusion.pos = [fusx + random.choice(posjit),lofusy + random.choice(posjit)]
 
         repeat_draw()
         win.flip()
@@ -518,10 +525,8 @@ def doAreaTask(ID=None, hem=None, location=None):
                 if cycle == 20:
                     hiFusion.resetProperties()
                     loFusion.resetProperties()
-                    print('positions', hiFusion.pos, loFusion.pos)
-                    hiFusion.pos = [hiFusion.pos[0]+random.choice(posjit),hiFusion.pos[1]+random.choice(posjit)]
-                    loFusion.pos = [loFusion.pos[0]+ random.choice(posjit),loFusion.pos[1]+random.choice(posjit)]
-                    print('positions2', hiFusion.pos, loFusion.pos,random.sample(posjit, 2))
+
+                    print('positions2', hiFusion.pos, loFusion.pos)
                 elif cycle == 21:
                     cycle = 0
                     turn = turn *-1
